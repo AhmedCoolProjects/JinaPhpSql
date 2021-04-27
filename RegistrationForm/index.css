@@ -1,0 +1,25 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+}
+.form_all {
+  width: 50%;
+}
+.form_title_container{
+    width: 100%;
+    text-align: center;
+    position: relative;
+  color: rgb(5, 5, 197) !important;
+}
+.form_title_container h2{
+  color: rgb(5, 5, 197) !important;
+}
