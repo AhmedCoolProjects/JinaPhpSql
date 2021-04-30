@@ -8,6 +8,13 @@ $password = $_POST["password"];
 $cpassword = $_POST["cpassword"];
 $gender = $_POST["gender"];
 
+// getting data from json url
+$url = 'https://raw.githubusercontent.com/BestBuyAPIs/open-data-set/master/products.json';
+$json_content = file_get_contents($url);
+// convert json to array
+$cnotent_array = json_decode($json_content, true);
+$len = sizeof($cnotent_array);
+
 if ($password != $cpassword) {
     echo "please enter the same password in the confirmation";
     die();
@@ -43,7 +50,7 @@ if ($password != $cpassword) {
             $stmt->execute();
             echo "Registration successful :)";
         } else {
-            echo "This Email Already Existe, Login ?";
+            echo "This Email Already Existe, Login ? $len";
         }
         $stmt->close();
         $conn->close();
