@@ -3,7 +3,7 @@
 $host = "localhost";
 $dbUsername = "root";
 $dbPassword = "";
-$dbName = "mydb";
+$dbName = "jina-web-store-db";
 // let's connect to mysqldb
 $conn = new mysqli($host, $dbUsername, $dbPassword, $dbName);
 

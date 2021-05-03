@@ -10,6 +10,10 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous" />
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
   <!-- end bootstrap links -->
+  <!-- jquery cdn -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+  </script>
+  <!-- end jquery cdn -->
   <title>Dashboard</title>
 </head>
 
@@ -17,7 +21,6 @@
   <!-- connection to db and variables -->
   <?php include 'connection.php' ?>
   <!-- end connection to db and variables -->
-
   <!-- top navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
@@ -109,25 +112,62 @@
   <div style="padding:70px" class="row row-cols-1 row-cols-md-3">
     <?php
     foreach ($my_array as $product) {
-      $product_image = $product['image'];
+      $product_image = $product['product_image_url'];
+      $product_name = $product['product_name'];
+      $product_price = $product['product_price'];
+      $product_brand = $product['product_brand'];
+      $product_id = $product['product_id'];
     ?>
       <div class="col mb-4">
-        <div class="card">
+        <div onclick='getDataForDialog("<?php echo $product_id; ?>",
+        "<?php echo $product_name; ?>",
+        "<?php echo $product_price; ?>",
+        "<?php echo $product_brand; ?>",
+        "<?php echo $product_image; ?>"
+        )' style='cursor: pointer;' data-bs-target='#productModal' data-bs-toggle='modal' class='card'>
           <?php
-          echo "<img style='height:200px;object-fit:contain' src=$product_image class='card-img-top' alt='...'>";
+
+          echo "<img style='height:200px;object-fit:contain' src=$product_image class='card-img-top' alt=$product_brand>";
           ?>
           <div class="card-body">
-            <h5 class="card-title">title</h5>
-            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+            <?php echo "<h5  class='card-title text-truncate'> $product_name </h5>"; ?>
+            <?php echo "<p class='card-text'> $product_brand</p>"; ?>
+            <?php echo "<div class='card-footer bg-transparent text-end'><h3> $product_price <sub>$</sub></h3></div>"; ?>
           </div>
         </div>
       </div>
     <?php
     }
     ?>
-
   </div>
   <!-- end grid products -->
+  <!-- modal -->
+  <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal_title_id"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          body
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end modal -->
+  <!-- js -->
+  <script>
+    function getDataForDialog(product_id, product_name, product_price, product_brand, product_image) {
+      // set the data into the modal
+      // $('#modal_title_id').text(product_name);
+    };
+  </script>
+  <!-- end js -->
 </body>
 
 </html>
