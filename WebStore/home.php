@@ -112,10 +112,17 @@
   <div style="padding:70px" class="row row-cols-1 row-cols-md-3">
     <?php
     foreach ($my_array as $product) {
-      $product_image = $product['product_image_url'];
+      $product_image_first = $product['product_image_url'];
+      $product_image_array = explode("|", $product_image_first);
       $product_name = $product['product_name'];
       $product_price = $product['product_price'];
       $product_brand = $product['product_brand'];
+      $product_image = $product_image_array[0];
+      // $product_image_array_str = "";
+      // foreach ($product_image_array as $item) {
+      //   $product_image_array_str .= $item + "|";
+      // }
+      // $product_image_array_str = implode("|", $product_image_array);
       $product_id = $product['product_id'];
     ?>
       <div class="col mb-4">
@@ -123,10 +130,9 @@
         "<?php echo $product_name; ?>",
         "<?php echo $product_price; ?>",
         "<?php echo $product_brand; ?>",
-        "<?php echo $product_image; ?>"
+        "<?php echo $product_image_first; ?>"
         )' style='cursor: pointer;' data-bs-target='#productModal' data-bs-toggle='modal' class='card'>
           <?php
-
           echo "<img style='height:200px;object-fit:contain' src=$product_image class='card-img-top' alt=$product_brand>";
           ?>
           <div class="card-body">
@@ -143,18 +149,36 @@
   <!-- end grid products -->
   <!-- modal -->
   <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modal_title_id"></h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          body
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+    <div style="align-items: center;justify-content:center;flex-direction:column;display:flex;" class="modal-dialog modal-dialog-centered">
+      <div style="min-width: fit-content !important;" class="modal-content">
+        <div class="modal-content-custom">
+          <div class="modal-content-left">
+            <!-- <img id="modal_image" src="" alt="modal_image" class="madal-content-left-image" /> -->
+            <!-- carousel -->
+            <div id="modalCarousel" class="carousel slide" data-bs-ride="carousel">
+              <div id="modal-carousal-div-containter" class="carousel-inner" style="height:auto">
+              </div>
+              <button class="carousel-control-prev" type="button" data-bs-target="#modalCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#modalCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+            <!-- end carousel -->
+            <div class="modal-content-left-fotter">
+              <strong id="modal_brand"></strong>
+              <h4 id="modal_price"></h4>
+            </div>
+          </div>
+          <div class="modal-content-right">
+            <h5 class="modal-title" id="modal_title_id"></h5>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary">Add to Bascket</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -162,9 +186,28 @@
   <!-- end modal -->
   <!-- js -->
   <script>
-    function getDataForDialog(product_id, product_name, product_price, product_brand, product_image) {
+    function getDataForDialog(product_id, product_name, product_price, product_brand, product_image_first) {
       // set the data into the modal
-      // $('#modal_title_id').text(product_name);
+      $('#modal_title_id').text(product_name);
+      // $('#modal_image').attr('src', product_image);
+      $('#modal_brand').text(product_brand);
+      $('#modal_price').text(product_price + '$');
+      // remove old content of the modal carousal
+      $('#modal-carousal-div-containter').empty();
+      // get the product_image_array
+      var product_image_array = product_image_first.split("|");
+      // add the carousel items
+      product_image_array.forEach((element, index) => {
+        if (index === 0) {
+          var item1 = `<div id='carousel_item_${index}' class='carousel-item active'></div>`;
+        } else {
+          var item1 = `<div id='carousel_item_${index}' class='carousel-item'></div>`;
+        }
+        $("#modal-carousal-div-containter").append(item1);
+        var item2 = `<img src="${element}" alt='modal_image' class="d-block w-120 madal-content-left-image" />`;
+        var id_ = `#carousel_item_${index}`;
+        $(id_).append(item2);
+      });
     };
   </script>
   <!-- end js -->
