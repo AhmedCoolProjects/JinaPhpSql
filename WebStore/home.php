@@ -56,7 +56,7 @@
           </li>
         </ul>
         <form class="d-flex">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+          <input class="form-control me-2" type="text" id="search_product" placeholder="Search a product ..." name="search_product" aria-label="Search" />
           <button class="btn btn-outline-success" type="submit">
             Search
           </button>
@@ -118,19 +118,29 @@
       $product_price = $product['product_price'];
       $product_brand = $product['product_brand'];
       $product_image = $product_image_array[0];
+      $product_description = $product['product_description'];
+      $mark1 = "&quot";
+      $mark2 = "&apos";
+      $mark3 = "'";
+      // modify the text to be transmeted 
+      $product_description = str_replace($mark1, "", $product_description);
+      $product_description = str_replace($mark3, " ", $product_description);
+      $product_id = $product['product_id'];
+      // $product_description = substr($product['product_description'], 0, 306);
+      // $product_description = substr($desc, 0, 100);
       // $product_image_array_str = "";
       // foreach ($product_image_array as $item) {
       //   $product_image_array_str .= $item + "|";
       // }
       // $product_image_array_str = implode("|", $product_image_array);
-      $product_id = $product['product_id'];
     ?>
       <div class="col mb-4">
         <div onclick='getDataForDialog("<?php echo $product_id; ?>",
         "<?php echo $product_name; ?>",
         "<?php echo $product_price; ?>",
         "<?php echo $product_brand; ?>",
-        "<?php echo $product_image_first; ?>"
+        "<?php echo $product_image_first; ?>",
+        "<?php echo $product_description; ?>"
         )' style='cursor: pointer;' data-bs-target='#productModal' data-bs-toggle='modal' class='card'>
           <?php
           echo "<img style='height:200px;object-fit:contain' src=$product_image class='card-img-top' alt=$product_brand>";
@@ -175,6 +185,8 @@
           </div>
           <div class="modal-content-right">
             <h5 class="modal-title" id="modal_title_id"></h5>
+            <strong style="font-size: 14px;margin-left:8px">Description:</strong>
+            <p style="font-size:12px;padding:8px;overflow-y:scroll;flex:1" id="modal_description_id"></p>
             <div class="modal-footer">
               <button type="button" class="btn btn-primary">Add to Bascket</button>
             </div>
@@ -186,11 +198,37 @@
   <!-- end modal -->
   <!-- js -->
   <script>
-    function getDataForDialog(product_id, product_name, product_price, product_brand, product_image_first) {
+    // search fct
+    $(document).ready(function() {
+      $("#search_product").keyup(function() {
+        var txt = $(this).val();
+        if (txt != "") {
+          $.ajax({
+            url: "products_grid.php",
+            method: 'post',
+            data: {
+              search: txt
+            },
+            dataType: "text",
+            success: function(data) {}
+          })
+        }
+
+      })
+
+    })
+    // modal fct
+    function getDataForDialog(product_id,
+      product_name,
+      product_price,
+      product_brand,
+      product_image_first,
+      product_description
+    ) {
       // set the data into the modal
       $('#modal_title_id').text(product_name);
-      // $('#modal_image').attr('src', product_image);
       $('#modal_brand').text(product_brand);
+      $('#modal_description_id').text(product_description);
       $('#modal_price').text(product_price + '$');
       // remove old content of the modal carousal
       $('#modal-carousal-div-containter').empty();

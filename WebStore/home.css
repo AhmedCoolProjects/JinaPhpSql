@@ -46,7 +46,7 @@ body {
   flex-direction: column;
   padding: 8px;
   width: 450px;
-  min-height: 350px;
+  height: 350px;
   position: relative;
   justify-content: space-between;
 }
